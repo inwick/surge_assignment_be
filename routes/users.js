@@ -4,11 +4,6 @@ const bcrypt = require("bcrypt");
 
 router.post("/", async (req, res) => {
     try {
-        //calling validate method created in studentRegistration model class
-        const { error } = validate(req.body);
-        if (error) {
-            return res.status(400).send({ message: error.details[0].message });
-        }
 
         //check email is already in database
         const user = await User.findOne({ email: req.body.email });
