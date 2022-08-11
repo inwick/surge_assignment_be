@@ -10,16 +10,10 @@ router.post("/", async (req, res) => {
             return res.status(400).send({ message: error.details[0].message });
         }
 
-        //check student ID already in database (check unique or not)
-        // const userID = await User.findOne({ id: req.body.id });
-        // if (userID) {
-        //     return res.json('User with given Student ID is already Exist!').status(401);
-        // }
-
         //check email is already in database
         const user = await User.findOne({ email: req.body.email });
         if (user) {
-            return res.json('User with given email already Exist!').status(400);
+            return res.status(400).json('User with given email already Exist!');
         }
 
         //user entered password converted in to hash password
@@ -36,10 +30,6 @@ router.post("/", async (req, res) => {
     }
 });
 
-
-
-
-
 router.route('/').get((req, res) => {
     User.find()
         .then(users => res.json(users))
@@ -47,7 +37,7 @@ router.route('/').get((req, res) => {
 });
 
 router.route('/add').post((req, res) => {
-    // const id = Number(req.body.id);
+    const id = req.body.id;
     const firstName = req.body.firstName;
     const lastName = req.body.lastName;
     const email = req.body.email;
@@ -58,7 +48,7 @@ router.route('/add').post((req, res) => {
     const accountType = req.body.accountType;
 
     const newUser = new User({
-        // id,
+        id,
         firstName,
         lastName,
         email,
@@ -90,11 +80,12 @@ router.route('/:id').delete((req, res) => {
 router.route('/update/:id').post((req, res) => {
     User.findById(req.params.id)
         .then(user => {
+            user.id = req.body.id;
             user.firstName = req.body.firstName;
             user.lastName = req.body.lastName;
             user.email = req.body.email;
-            user.dateOfBirth = Date.parse(req.body.dateOfBirth);
-            user.mobile = Number(req.body.mobile);
+            user.dateOfBirth = req.body.dateOfBirth;
+            user.mobile = req.body.mobile;
             user.status = Boolean(req.body.status);
             user.password = req.body.password;
             user.accountType = req.body.accountType;
