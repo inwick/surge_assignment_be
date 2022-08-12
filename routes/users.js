@@ -72,7 +72,10 @@ router.route('/:id').delete((req, res) => {
         .catch(err => res.status(400).json('Error: ' + err));
 });
 
-router.route('/update/:id').post((req, res) => {
+router.route('/update/:id').put(async (req, res) => {
+    const salt = await bcrypt.genSalt(Number(process.env.SALT));
+    const hashPassword = await bcrypt.hash(req.body.password, salt);
+
     User.findById(req.params.id)
         .then(user => {
             user.id = req.body.id;
@@ -82,7 +85,7 @@ router.route('/update/:id').post((req, res) => {
             user.dateOfBirth = req.body.dateOfBirth;
             user.mobile = req.body.mobile;
             user.status = Boolean(req.body.status);
-            user.password = req.body.password;
+            user.password = hashPassword;
             user.accountType = req.body.accountType;
 
             user.save()

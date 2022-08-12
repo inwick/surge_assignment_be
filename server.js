@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
+const seed = require('./seed');
 
 require('dotenv').config();
 
@@ -29,6 +30,8 @@ app.use('/user', userRouter);
 app.use('/student-login', loginRouter);
 
 app.use('/note', noteRouter);
+
+seed();
 
 app.listen(port, () => {
     console.log(`Server is running on port: ${port}`);
