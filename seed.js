@@ -1,32 +1,30 @@
-// const User = require('./models/user.model');
-// const mongoose = require('mongoose');
+const { User } = require('./models/user.model');
+const mongoose = require('mongoose');
+const bcrypt = require("bcrypt");
 
-// // require('dotenv').config();
+const seedAdmin = {
+    id: 88,
+    firstName: 'Isuru',
+    lastName: 'Sahan',
+    email: 'isuru@gmail.com',
+    dateOfBirth: '1999-10-27',
+    mobile: 0775674321,
+    status: true,
+    password: 'Isuru@1234',
+    accountType: 'Admin'
+};
 
-// // const uri = process.env.ATLAS_URI;
-// // mongoose.connect(uri, {});
+const seedDB = async () => {
+    const salt = await bcrypt.genSalt(Number(process.env.SALT));
+    const hashPassword = await bcrypt.hash(seedAdmin.password, salt);
+    try {
+        seedAdmin.password = hashPassword;
+        await User.create(seedAdmin);
 
-// const seedAdmin = {
-//     id: 99,
-//     firstName: 'Sam',
-//     lastName: 'Jecob',
-//     email: 'samj@gmail.com',
-//     dateOfBirth: '20-10-1999',
-//     mobile: 01234567,
-//     status: true,
-//     password: 'Sam@1234',
-//     accountType: 'Admin'
-// };
+        console.log("data imported");
+    } catch (err) {
+        // console.error(err);
+    }
+};
 
-// const seedDB = async () => {
-//     try {
-//         await User.create(seedAdmin);
-//         console.log("data imported");
-//     } catch (err) {
-//         console.error(err);
-//     }
-// };
-
-// seedDB().then(() => {
-//     mongoose.connection.close();
-// })
+module.exports = seedDB; 
