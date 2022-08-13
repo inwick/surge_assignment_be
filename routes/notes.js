@@ -10,10 +10,12 @@ router.route('/').get((req, res) => {
 router.route('/add').post((req, res) => {
     const title = req.body.title;
     const description = req.body.description;
+    const stdId = req.body.stdId;
 
     const newNote = new Note({
         title,
         description,
+        stdId,
     });
 
     newNote.save()
@@ -21,10 +23,22 @@ router.route('/add').post((req, res) => {
         .catch(err => res.status(400).json('Error: ' + err));
 });
 
-router.route('/:id').get((req, res) => {
+router.route('/byId/:id').get((req, res) => {
     Note.findById(req.params.id)
         .then(note => res.json(note))
         .catch(err => res.status(400).json('Error: ' + err));
+});
+
+router.route('/:id').get(async (req, res) => {
+    try {
+        let StuId = req.params.id;
+
+        const records = await Note.find({ stdId: StuId });
+        res.status(200).json(records);
+    }
+    catch (error) {
+        res.status(400).json(error);
+    }
 });
 
 router.route('/:id').delete((req, res) => {
