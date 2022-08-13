@@ -5,7 +5,7 @@ const bcrypt = require("bcrypt");
 const seedAdmin = {
     id: 88,
     firstName: 'Isuru',
-    lastName: 'Sahan',
+    lastName: 'Jayan',
     email: 'isuru@gmail.com',
     dateOfBirth: '1999-10-27',
     mobile: 0775674321,
@@ -23,7 +23,6 @@ const seedDB = async () => {
 
         console.log("data imported");
     } catch (err) {
-        // console.error(err);
     }
 };
 

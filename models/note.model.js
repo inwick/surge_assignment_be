@@ -5,6 +5,7 @@ const Schema = mongoose.Schema;
 const noteSchema = new Schema({
     title: { type: String, required: true },
     description: { type: String },
+    stdId: { type: String }
 }, {
     timestamps: true,
 });
